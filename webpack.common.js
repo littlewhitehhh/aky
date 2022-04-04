@@ -45,6 +45,33 @@ module.exports = {
                     "sass-loader",
                 ],
             },
+
+            // images
+            {
+                test: /\.(png|webp)$/,
+                type: "asset/resource",
+                generator: {
+                    filename: "images/[content][ext]", //优先级高
+                },
+            },
+            {
+                test: /\.jpg$/,
+                type: "asset", //在asset/resouce 和asset/inline之间进行选择   资源大于8k resource  小于8k  inline
+                parser: {
+                    //修改选择的规则
+                    dataUrlCondition: {
+                        maxSize: 4 * 1024 * 1024,
+                    },
+                },
+            },
+            {
+                test: /\.svg$/,
+                type: "asset/inline", //资源的的Data Url   base64文件
+            },
+            {
+                test: /\.txt$/,
+                type: "asset/source", //导出资源源代码
+            },
         ],
     },
 };
