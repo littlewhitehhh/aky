@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin"); //html模板
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin"); //css代码分离
 
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin"); //css代码压缩
+// const CssMinimizerPlugin = require("css-minimizer-webpack-plugin"); //css代码压缩
 
 module.exports = {
     entry: {
@@ -29,7 +29,6 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: "styles/[contenthash].css", // 配置打包后css文件的位置和文件名
         }),
-        new CssMinimizerPlugin(),
     ],
 
     module: {
@@ -72,6 +71,39 @@ module.exports = {
                 test: /\.txt$/,
                 type: "asset/source", //导出资源源代码
             },
+            //字体图标
+            {
+                test: /.(woff|woff2|eot|ttf|otf)$/i,
+                include: [path.resolve(__dirname, "./src")],
+                type: "asset/resource",
+                generator: {
+                    filename: "iconfont/[hash][ext][query]", // 局部指定输出位置
+                },
+            },
+
+            // js
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: ["@babel/preset-env"],
+                        plugins: ["@babel/plugin-transform-runtime"],
+                    },
+                },
+            },
         ],
+    },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: "vendors",
+                    chunks: "all",
+                },
+            },
+        },
     },
 };
