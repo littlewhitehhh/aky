@@ -7,4 +7,10 @@ module.exports = merge(common, {
     output: {
         filename: "[name].[contenthash:8].js",
     },
+
+    devServer: {
+        static: "./dist",
+        port: 8880,
+        hot: true,
+    },
 });
